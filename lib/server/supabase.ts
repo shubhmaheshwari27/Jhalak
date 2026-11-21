@@ -1,6 +1,6 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
-export const BUCKET = "cloakroom";
+export const BUCKET = "jhalak";
 
 let client: SupabaseClient | null = null;
 

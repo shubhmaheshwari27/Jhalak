@@ -26,8 +26,8 @@ export default function Login() {
     <div className="mx-auto mt-16 max-w-sm space-y-6 text-center">
       <div>
         <div className="text-5xl">🥻</div>
-        <h1 className="h1 mt-2">Cloakroom</h1>
-        <p className="text-sm text-stone-500">Virtual saree try-on · test app</p>
+        <h1 className="h1 mt-2">Jhalak</h1>
+        <p className="text-sm text-stone-500">Ek jhalak, har saree mein · test app</p>
       </div>
       <form onSubmit={submit} className="card space-y-3 text-left">
         <label className="text-sm font-medium">Team passcode</label>

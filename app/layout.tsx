@@ -3,7 +3,7 @@ import "./globals.css";
 import Nav from "@/components/Nav";
 
 export const metadata: Metadata = {
-  title: "Cloakroom – Saree Try-On",
+  title: "Jhalak – Saree Try-On",
   description: "Virtual saree try-on test app",
 };
 

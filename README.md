@@ -1,4 +1,4 @@
-# Cloakroom – Virtual Saree Try-On (test app)
+# Jhalak – Virtual Saree Try-On (test app)
 
 A mobile-first web app for testing which AI approach makes the most accurate saree try-on from one labelled photo of a folded saree.
 
@@ -21,7 +21,7 @@ You rate each image on **saree accuracy** and **face likeness** (blind mode hide
 
 ### 2. Create the Supabase database
 1. Create a free project at https://supabase.com (pick the Mumbai region).
-2. Open **SQL Editor → New query**, paste everything in `supabase/schema.sql` and click **Run**. This creates the tables and a private `cloakroom` storage bucket.
+2. Open **SQL Editor → New query**, paste everything in `supabase/schema.sql` and click **Run**. This creates the tables and a private `jhalak` storage bucket.
 3. Go to **Project Settings → API** and copy the **Project URL** and the **service_role** key (keep it secret; it only goes in Vercel).
 
 ### 3. Deploy on Vercel

@@ -48,5 +48,5 @@ alter table tryons enable row level security;
 
 -- Private storage bucket for all photos
 insert into storage.buckets (id, name, public)
-values ('cloakroom', 'cloakroom', false)
+values ('jhalak', 'jhalak', false)
 on conflict (id) do nothing;

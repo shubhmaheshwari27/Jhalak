@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <div className="space-y-6">
       <header>
-        <p className="text-xs uppercase tracking-widest text-maroon">Cloakroom · test app</p>
+        <p className="text-xs uppercase tracking-widest text-maroon">Jhalak · test app</p>
         <h1 className="h1 mt-1">See any saree on you, without draping it</h1>
         <p className="mt-2 text-sm text-stone-600">
           This app tests two ways of making a virtual try-on, using two different AI models, so you can see which one copies the saree most accurately.
