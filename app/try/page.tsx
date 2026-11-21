@@ -18,6 +18,18 @@ export default function TryOn() {
   const [approaches, setApproaches] = useState<string[]>(["A", "B"]);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [configured, setConfigured] = useState<Record<string, boolean>>({ openai: true, gemini: true });
+
+  useEffect(() => {
+    fetch("/api/health")
+      .then((r) => r.json())
+      .then((h) => {
+        const c = { openai: !!h.openai, gemini: !!h.gemini };
+        setConfigured(c);
+        setProviders((p) => p.filter((x) => c[x as "openai" | "gemini"]));
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     api<{ sarees: Saree[] }>("/api/sarees")
@@ -103,9 +115,9 @@ export default function TryOn() {
             ["openai", "OpenAI"],
             ["gemini", "Gemini"],
           ].map(([v, l]) => (
-            <button key={v} type="button" onClick={() => toggle(providers, setProviders, v)}
-              className={`chip px-3 py-1.5 text-sm ${providers.includes(v) ? "bg-maroon text-white" : "bg-stone-100 text-stone-600"}`}>
-              {l}
+            <button key={v} type="button" disabled={!configured[v]} onClick={() => toggle(providers, setProviders, v)}
+              className={`chip px-3 py-1.5 text-sm disabled:opacity-40 ${providers.includes(v) ? "bg-maroon text-white" : "bg-stone-100 text-stone-600"}`}>
+              {l}{configured[v] ? "" : " (no key yet)"}
             </button>
           ))}
           {[
