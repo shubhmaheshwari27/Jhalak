@@ -27,6 +27,11 @@ async function readError(res: Response, who: string): Promise<never> {
     const j = JSON.parse(body);
     msg = j?.error?.message ?? body;
   } catch {}
+  if (res.status === 429 && /quota/i.test(msg)) {
+    throw new Error(
+      `${who} quota exceeded. If this says "Free Tier" / "limit: 0", image generation needs billing enabled on your ${who} API key. Details: ${msg.slice(0, 200)}`
+    );
+  }
   throw new Error(`${who} ${res.status}: ${msg.slice(0, 500)}`);
 }
 
