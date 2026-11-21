@@ -22,7 +22,7 @@ You rate each image on **saree accuracy** and **face likeness** (blind mode hide
 ### 2. Create the Supabase database
 1. Create a free project at https://supabase.com (pick the Mumbai region).
 2. Open **SQL Editor → New query**, paste everything in `supabase/schema.sql` and click **Run**. This creates the tables and a private `jhalak` storage bucket.
-3. Go to **Project Settings → API** and copy the **Project URL** and the **service_role** key (keep it secret; it only goes in Vercel).
+3. Go to **Project Settings → API** and copy the **Project URL** and a **secret** key (API Keys → Secret keys; the legacy service_role key also works) (keep it secret; it only goes in Vercel).
 
 ### 3. Deploy on Vercel
 1. Push this folder to a GitHub repo.
@@ -33,7 +33,7 @@ You rate each image on **saree accuracy** and **face likeness** (blind mode hide
 |---|---|
 | `APP_PASSCODE` | any passcode your team will type once |
 | `SUPABASE_URL` | from step 2 |
-| `SUPABASE_SERVICE_ROLE_KEY` | from step 2 |
+| `SUPABASE_SECRET_KEY` | from step 2 |
 | `OPENAI_API_KEY` | from step 1 |
 | `GEMINI_API_KEY` | from step 1 |
 | `OPENAI_IMAGE_MODEL` | `gpt-image-2.5-sunburst` (optional; this is the default) |

@@ -33,7 +33,7 @@ async function readError(res: Response, who: string): Promise<never> {
 /* ---------------- Step A: describe the saree ---------------- */
 
 export async function describeSaree(saree: Img): Promise<unknown> {
-  const provider = (process.env.SPEC_PROVIDER || "openai") as Provider;
+  const provider = (process.env.SPEC_PROVIDER || (process.env.OPENAI_API_KEY ? "openai" : "gemini")) as Provider;
   return provider === "gemini" ? describeWithGemini(saree) : describeWithOpenAI(saree);
 }
 
@@ -69,7 +69,7 @@ async function describeWithOpenAI(saree: Img) {
 }
 
 async function describeWithGemini(saree: Img) {
-  const model = env("GEMINI_TEXT_MODEL", "gemini-2.5-flash");
+  const model = env("GEMINI_TEXT_MODEL", "gemini-3.5-flash");
   const res = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
     {
