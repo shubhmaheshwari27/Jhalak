@@ -62,7 +62,7 @@ export default function NewSaree() {
         </div>
         {err && <p className="text-sm text-red-700">{err}</p>}
         <button className="btn w-full" disabled={!photo || !name || busy} onClick={save}>
-          {busy ? "Saving & describing the saree (≈20s)…" : "Save saree"}
+          {busy ? "Uploading…" : "Save saree"}
         </button>
       </div>
     </div>

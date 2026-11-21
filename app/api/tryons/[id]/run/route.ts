@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { requireAuth, errorJson } from "@/lib/server/auth";
 import { db, downloadImage, uploadImage } from "@/lib/server/supabase";
 import { generateTryOn, Provider, Approach } from "@/lib/server/ai";
@@ -36,36 +36,38 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       .select("id");
     if (!claimed?.length) return NextResponse.json({ status: "running" });
 
-    const started = Date.now();
-    try {
-      const [person, saree] = await Promise.all([
-        downloadImage(t.sessions.customer_photo_path),
-        downloadImage(t.sarees.photo_path),
-      ]);
-      const out = await generateTryOn({
-        provider: t.provider as Provider,
-        approach: t.approach as Approach,
-        person,
-        saree,
-        spec: t.sarees.spec,
-      });
-      const ext = out.mime.includes("jpeg") ? "jpg" : out.mime.includes("webp") ? "webp" : "png";
-      const image_path = `tryons/${t.session_id}/${id}.${ext}`;
-      await uploadImage(image_path, out.buffer, out.mime);
-      await db()
-        .from("tryons")
-        .update({ status: "done", image_path, duration_ms: Date.now() - started, error: null })
-        .eq("id", id);
-      return NextResponse.json({ status: "done" });
-    } catch (e) {
-      const msg = e instanceof Error ? e.message : String(e);
-      await db()
-        .from("tryons")
-        .update({ status: "failed", error: msg, duration_ms: Date.now() - started })
-        .eq("id", id);
-      return NextResponse.json({ status: "failed", error: msg });
-    }
+    after(() => generate(id, t));
+    return NextResponse.json({ status: "running" });
   } catch (e) {
     return errorJson(e);
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function generate(id: string, t: any) {
+  const started = Date.now();
+  try {
+    const [person, saree] = await Promise.all([
+      downloadImage(t.sessions.customer_photo_path),
+      downloadImage(t.sarees.photo_path),
+    ]);
+    const out = await generateTryOn({
+      provider: t.provider as Provider,
+      approach: t.approach as Approach,
+      person,
+      saree,
+      spec: t.sarees.spec,
+    });
+    const ext = out.mime.includes("jpeg") ? "jpg" : out.mime.includes("webp") ? "webp" : "png";
+    const image_path = `tryons/${t.session_id}/${id}.${ext}`;
+    await uploadImage(image_path, out.buffer, out.mime);
+    await db()
+      .from("tryons")
+      .update({ status: "done", image_path, duration_ms: Date.now() - started, error: null })
+      .eq("id", id);
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    console.error("tryon failed", id, msg);
+    await db().from("tryons").update({ status: "failed", error: msg, duration_ms: Date.now() - started }).eq("id", id);
   }
 }

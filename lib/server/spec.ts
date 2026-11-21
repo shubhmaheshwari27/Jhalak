@@ -9,6 +9,7 @@ export async function runSpec(id: string, photo_path: string) {
     await db().from("sarees").update({ spec, spec_status: "done", spec_error: null }).eq("id", id);
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
+    console.error("spec failed", id, msg);
     await db().from("sarees").update({ spec_status: "failed", spec_error: msg }).eq("id", id);
   }
 }

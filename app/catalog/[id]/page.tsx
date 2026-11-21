@@ -25,6 +25,17 @@ export default function SareeDetail() {
       .catch((e) => setMsg(e.message));
   }, [id]);
 
+  // While the AI is still describing the saree, check every 4 seconds.
+  useEffect(() => {
+    if (saree?.spec_status !== "pending") return;
+    const h = setInterval(() => {
+      api<{ saree: Saree }>(`/api/sarees/${id}`).then((d) => {
+        if (d.saree.spec_status !== "pending") load(d.saree);
+      }).catch(() => {});
+    }, 4000);
+    return () => clearInterval(h);
+  }, [id, saree?.spec_status]);
+
   async function rerun() {
     setBusy("rerun");
     setMsg(null);
@@ -98,6 +109,9 @@ export default function SareeDetail() {
             </p>
           </div>
           {saree.spec_status === "failed" && <p className="text-sm text-red-700">{saree.spec_error}</p>}
+          {saree.spec_status === "pending" && (
+            <p className="text-sm text-amber-700">The AI is reading the saree photo. This usually takes 10–30 seconds…</p>
+          )}
           <textarea
             className="input h-80 font-mono text-xs"
             value={specText}
@@ -110,7 +124,7 @@ export default function SareeDetail() {
               {busy === "save" ? "Saving…" : "Save edits"}
             </button>
             <button className="btn-secondary" onClick={rerun} disabled={!!busy}>
-              {busy === "rerun" ? "Describing…" : "↻ Re-describe"}
+              {busy === "rerun" || saree.spec_status === "pending" ? "Describing…" : "↻ Re-describe"}
             </button>
           </div>
           <button className="w-full text-sm text-red-700 underline" onClick={remove} disabled={!!busy}>

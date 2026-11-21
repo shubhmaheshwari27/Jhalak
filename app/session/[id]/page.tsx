@@ -22,7 +22,7 @@ type TryOn = {
 };
 type Session = { id: string; label: string | null; customer_photo_url: string | null; created_at: string };
 
-const CONCURRENCY = 4;
+const CONCURRENCY = 6;
 const VARIANT_ORDER = ["openai-A", "openai-B", "gemini-A", "gemini-B"];
 
 /** Same shuffle every time for a given saree, so blind mode stays consistent. */
@@ -82,7 +82,7 @@ export default function SessionPage() {
   // While something is running (maybe from another device), poll.
   useEffect(() => {
     if (!tryons.some((t) => t.status === "running")) return;
-    const h = setInterval(refresh, 8000);
+    const h = setInterval(refresh, 5000);
     return () => clearInterval(h);
   }, [tryons, refresh]);
 

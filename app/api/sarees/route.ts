@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { requireAuth, errorJson } from "@/lib/server/auth";
 import { db, parseDataUrl, uploadImage, signUrls } from "@/lib/server/supabase";
 import { runSpec } from "@/lib/server/spec";
 
-export const maxDuration = 120;
+export const maxDuration = 300;
 
 export async function GET() {
   const denied = await requireAuth();
@@ -41,7 +41,7 @@ export async function POST(req: Request) {
     });
     if (error) throw error;
 
-    await runSpec(id, photo_path);
+    after(() => runSpec(id, photo_path));
     const { data } = await db().from("sarees").select("*").eq("id", id).single();
     return NextResponse.json({ saree: data });
   } catch (e) {
