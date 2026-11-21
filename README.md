@@ -1,5 +1,7 @@
 # Jhalak – Virtual Saree Try-On (test app)
 
+Live: https://jhalak-pearl.vercel.app
+
 A mobile-first web app for testing which AI approach makes the most accurate saree try-on from one labelled photo of a folded saree.
 
 For every saree it makes **4 images** and shows them side by side:
